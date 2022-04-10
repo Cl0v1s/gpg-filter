@@ -4,22 +4,44 @@ import email
 import gnupg
 import hashlib
 import time
+import json
 
-gpg = gnupg.GPG(gnupghome='/home/gpg-filter/.gnupg')
+# retrieve config
+config_raw = open('./config.json', 'r')
+config = json.loads(config_raw.read())
+
+# init gnupg
+gpg = gnupg.GPG(gnupghome=config["gnupghome"])
+gpg.encoding = "UTF-8"
 uids = list()
 for key in gpg.list_keys():
     uids = uids + key["uids"]
 
-def encrypt_message(message, to):
-    body = gpg.encrypt(message.as_string(), to, always_trust=True).__str__()
 
+def encrypt_message(message, to):
+    if message.get_content_type() == 'multipart/encrypted':
+        return message
+
+    encrypted_message = email.message.Message()
+
+    # generating boundary and content type header
     h = hashlib.new('sha256')
     h.update(time.time().__str__().encode('ascii'))
     boundary = '---------------------------' + h.hexdigest()
-    encrypted_message = email.message.Message()
     encrypted_message.add_header('Content-Type', 'multipart/encrypted',
         protocol='application/pgp-encrypted', boundary=boundary
     )
+
+    # force content in utf-8 before encrypting
+    content = None
+    if message.get_param('charset') != None:
+        content = message.as_bytes().decode(message.get_param('charset'))
+    else:
+        content = message.as_string()
+    encrypted_message.set_param('charset', 'UTF-8')
+
+    # encrypting
+    body = gpg.encrypt(content, to, always_trust=True).__str__()
 
     preamble = email.message.Message()
     preamble.add_header('Content-Type', 'application/pgp-encrypted')
@@ -33,50 +55,28 @@ def encrypt_message(message, to):
 
     return encrypted_message
 
-def extract_main_body(message):
-    main_body = email.message.Message()
-    for param in message.get_params():
-        if(param[1] == ''):
-            main_body.set_type(param[0])
-        else:
-            main_body.set_param(param[0], param[1])
-
-    payload = message.get_payload()
-
-    if(type(payload) == str):
-        main_body.set_payload(payload)
-    else:
-        for p in payload:
-            main_body.attach(p)
-
-    return main_body
-
-def replace_main_body(message, body):
-    for param in body.get_params():
-        if(param[1] == ''):
-            message.set_type(param[0])
-        else:
-            message.set_param(param[0], param[1])
-    
-    payload = body.get_payload()
-    message.set_payload(None)
-    if(type(payload) == str):
-        message.set_payload(payload)
-    else:
-        for p in payload:
-            message.attach(p)
+def restore_headers(original, encrypted):
+    for t in original.items():
+        if t[0] != 'Content-Type' and t[0] != 'Content-Transfer-Encoding':
+            encrypted[t[0]] = t[1]
 
 def send(to, mail):
-    p = run(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, encoding='ascii', input=mail.as_string())
-    return
+    if config['debug'] == True:
+        print(mail.as_string())
+    else:
+        p = run(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, encoding='ascii', input=mail.as_string())
 
 def handle(raw, to):
     original_mail = email.message_from_string(raw)
-    uid = [x for x in uids if to in x]
-    if len(uid) > 0:
-        body = extract_main_body(original_mail)
-        encrypted_body = encrypt_message(body, to)
-        replace_main_body(original_mail, encrypted_body)
+    try:
+        uid = [x for x in uids if to in x]
+        if len(uid) > 0:
+            encrypted_mail = encrypt_message(original_mail, to)
+            restore_headers(original_mail, encrypted_mail)
+            send(to, encrypted_mail)
+            return
+    except Exception as err:
+        print(err)
     send(to, original_mail)
 
     
