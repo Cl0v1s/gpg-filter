@@ -1,7 +1,7 @@
 # GPG Filter
 
-This script is a simple content filter for Postfix.
-It encrypts incoming emails using public keys saved in the configured gnupg home.
+This script is a simple content filter for Postfix.  
+It encrypts incoming emails using public keys saved in the configured gnupg home.  
 if no matching public key is available, the incoming e-mail will not be encrypted.
 
 It was created as a [RFC 3156](https://datatracker.ietf.org/doc/rfc3156/) compliant alternative to [GPG-mailgate](https://github.com/fkrone/gpg-mailgate), since emails encrypted with the latter are not readable for most of the email client with OpenPGP support.
@@ -37,7 +37,7 @@ smtp      inet  ...other stuff here, do not change...   smtpd
     -o content_filter=gpg-filter:dummy
 ```
 
-5. Edit the gpg-filter config.json file and set `gnupghome` to folder .gnupg in the gpg-filter user's home directory 
+5. Edit the gpg-filter config.json file and set `gnupghome` to the .gnupg folder in the gpg-filter user's home directory 
 6. You can now add public keys to the gpg-filter user keyring with
 ```
 sudo -u gpg-filter /usr/bin/gpg --import /some/public.key
