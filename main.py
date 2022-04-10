@@ -1,11 +1,11 @@
 import sys
-from subprocess import Popen, PIPE
+from subprocess import run, PIPE
 import email
 import gnupg
 import hashlib
 import time
 
-gpg = gnupg.GPG(gnupghome='/home/clovis/.gnupg')
+gpg = gnupg.GPG(gnupghome='/home/gpg-filter/.gnupg')
 uids = list()
 for key in gpg.list_keys():
     uids = uids + key["uids"]
@@ -67,8 +67,7 @@ def replace_main_body(message, body):
             message.attach(p)
 
 def send(to, mail):
-    p = Popen(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, stdin=PIPE)
-    output = p.communicate(input=mail.as_string().encode())[0]
+    p = run(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, encoding='ascii', input=mail.as_string())
     return
 
 def handle(raw, to):
