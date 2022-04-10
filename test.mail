@@ -1,0 +1,76 @@
+X-Antivirus: avast (VPS 22040902)
+X-Antivirus-Status: Clean
+Return-Path: <clovis@bdx.town>
+X-Original-To: clovis@bdx.town
+Delivered-To: clovis@bdx.town
+Received: from [127.0.0.1] (i19-lef01-ix2-176-180-88-72.dsl.dyn.abo.bbox.fr [176.180.88.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by bdx.town (Postfix) with ESMTPSA id 5B89024013C
+	for <clovis@bdx.town>; Sat,  9 Apr 2022 15:56:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mail.byte49.exposed;
+	s=mail; t=1649519771;
+	bh=f6fuk3nN9qbO+oueM7KIBTCXiWPjWrR/eN6JpmEEgPE=;
+	h=Date:From:To:Subject:From;
+	b=ALNTpVYVm8zL+hwV1MJMNfmdLDmN4SbH93YEMPjvsLzm+t7ypqP0tdyl4vlZYzsYX
+	 WE6vTkQ0RGXmZe6ShFp/IFxYVYhmi5modTNiWSP9b8HOPbzbSywpvXNTXMQc9M2E2b
+	 iSOxcOnz+NkjaF6mKFh2UVpqrN4a+2Oddtkui6V+paMjSst1kfkcrTEwpSaH90fv9z
+	 DTrlwOc/73KRHWa8GA8MGvDCV5ukpjwMUJkSJsMXwRcS3XV5qIqG3QpBZ7RZf3/noz
+	 NMwAVRVsrLl8i9BfzWr3GARfHFWMtgRftVQJ6EO8wVS+cJEI+KEVwljehu2BXdoGmr
+	 KvbRe0pBV1GDg==
+Date: Sat, 09 Apr 2022 17:56:07 +0200
+From: Clovis <clovis@bdx.town>
+To: clovis@bdx.town
+Subject: Test
+User-Agent: K-9 Mail for Android
+Message-ID: <CD911F05-4750-47C8-B8C0-29B23ADD843C@bdx.town>
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary=----6N98L3DCPDHQFEYEK3OJSLWNVCDVWP
+Content-Transfer-Encoding: 7bit
+Autocrypt: addr=clovis@bdx.town; keydata=
+ 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
+
+------6N98L3DCPDHQFEYEK3OJSLWNVCDVWP
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+Test
+------6N98L3DCPDHQFEYEK3OJSLWNVCDVWP
+Content-Type: text/html;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html><body>Test</body></html>
+------6N98L3DCPDHQFEYEK3OJSLWNVCDVWP--
