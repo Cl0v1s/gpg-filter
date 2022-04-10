@@ -5,9 +5,10 @@ import gnupg
 import hashlib
 import time
 import json
+import os
 
 # retrieve config
-config_raw = open('./config.json', 'r')
+config_raw = open(os.path.abspath(os.path.dirname(__file__)) + '/config.json', 'r')
 config = json.loads(config_raw.read())
 
 # init gnupg
