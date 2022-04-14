@@ -4,7 +4,7 @@ This script is a simple content filter for Postfix.
 It encrypts incoming emails using public keys saved in the configured gnupg home.  
 if no matching public key is available, the incoming e-mail will not be encrypted.
 
-It was created as a [RFC 3156](https://datatracker.ietf.org/doc/rfc3156/) compliant alternative to [GPG-mailgate](https://github.com/fkrone/gpg-mailgate), since emails encrypted with the latter are not readable for most of the email client with OpenPGP support.
+It was created as a [RFC 3156](https://datatracker.ietf.org/doc/rfc3156/) compliant alternative to [GPG-mailgate](https://github.com/fkrone/gpg-mailgate), since emails encrypted with the latter are not readable for most of the email clients with OpenPGP support.
 
 ## Requirements 
 
