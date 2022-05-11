@@ -65,7 +65,7 @@ def send(to, mail):
     if config['debug'] == True:
         print(mail.as_string())
     else:
-        p = run(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, encoding='ascii', input=mail.as_string())
+        p = run(['/usr/sbin/sendmail', '-G', '-i', to], stdout=PIPE, stderr=PIPE, encoding=mail.get_content_charset('ascii'), input=mail.as_string())
 
 def handle(raw, to):
     original_mail = email.message_from_string(raw)
